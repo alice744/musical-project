@@ -20,14 +20,17 @@ const TrackPage = ({ serverTrack }) => {
                 text: text.value,
                 trackId: track._id
             })
-            setTrack({...track, comments: [...track.comments, response.data]})
+            setTrack({ ...track, comments: [...track.comments, response.data] })
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <MainLayout>
+        <MainLayout
+            title={'Music platform' + track.name + ' - ' + track.artist}
+            keywords={track.name + ', ' + track.artist}
+        >
             <Button
                 variant={'outlined'}
                 style={{ fontSize: 32 }}
