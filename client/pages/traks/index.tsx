@@ -6,13 +6,19 @@ import { ITrack } from '../../types/track';
 import TrackList from '../../components/TrackList';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
+import { NextThunkDispatch, wrapper } from '../../store';
+import { fetchTraks } from '../../store/actions-creators/track';
 
 const Index = () => {
     const router = useRouter();
-    const tracks: ITrack = [
-        {'_id': '1', 'name': 'Name 1','artist': 'Artist 1','text': 'Text','listens': 0,'picture': '','audio': '','comments': []},
-        {'_id': '2', 'name': 'Name 2','artist': 'Artist 2','text': 'Text','listens': 0,'picture': '','audio': '','comments': []},
-    ];
+    const { tracks, error } = useTypedSelector(state => state.track);
+
+    if (error) {
+        return <MainLayout>
+            <h1>{error}</h1>
+        </MainLayout>
+    }
+
     return (
         <MainLayout>
             <Grid container justifyContent='center'>
@@ -33,3 +39,9 @@ const Index = () => {
 };
 
 export default Index;
+
+
+export const getServerSideProps = wrapper.getServerSideProps(async ({ store }) => {
+    const dispatch = store.dispatch as NextThunkDispatch
+    await dispatch(await fetchTraks())
+})
